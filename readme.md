@@ -36,7 +36,6 @@
 ### 3️⃣ Redirect to Long URL
 **GET /{short_code}**
 - Redirects the user to the original URL.
-- **Example:** Visiting `https://your-domain/custom123` redirects to `https://example.com`.
 
 ### 4️⃣ Get URL Stats
 **GET /stats/{short_code}**
