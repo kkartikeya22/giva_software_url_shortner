@@ -23,7 +23,7 @@
   ```json
   {
     "long_url": "https://example.com",
-    "alias": "custom123"  // Optional
+    "alias": "custom123"  (// Optional)
   }
   ```
 - **Response:**
