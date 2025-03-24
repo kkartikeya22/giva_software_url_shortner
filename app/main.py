@@ -2,7 +2,7 @@ import os
 import validators
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import collection
 from app.models import URLSchema
@@ -19,6 +19,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def home():
+    """Home route displaying a welcome message."""
+    return JSONResponse(
+        content={
+            "message": "🚀 Welcome to the FastAPI URL Shortener!",
+            "usage": {
+                "shorten_url": "POST /shorten (Provide 'long_url' and optional 'alias')",
+                "redirect": "GET /{short_code} (Redirects to original URL)",
+                "stats": "GET /stats/{short_code} (Returns click count and original URL)"
+            },
+            "github_repo": "https://github.com/your-repo-link",  # Change this if needed
+        }
+    )
 
 @app.post("/shorten")
 def shorten_url(url: URLSchema):
