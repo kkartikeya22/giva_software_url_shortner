@@ -1,3 +1,6 @@
+import os
+import validators
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,17 +8,16 @@ from app.database import collection
 from app.models import URLSchema
 from app.utils import generate_short_code
 from app.config import BASE_URL
-import validators
 
 app = FastAPI()
 
-# Enable CORS for public access
+# Enable CORS for public access (Allow in Development, Restrict in Production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (Change in production)
+    allow_origins=["*"],  # Change this in production to specific domains
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.post("/shorten")
@@ -56,3 +58,7 @@ def get_url_stats(short_code: str):
         raise HTTPException(status_code=404, detail="Short URL not found")
 
     return {"long_url": entry["long_url"], "short_code": short_code, "clicks": entry["clicks"]}
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Read port from environment variables
+    uvicorn.run(app, host="0.0.0.0", port=port)
